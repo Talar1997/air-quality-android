@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">AirQualityAndroid</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">AirQuality</string>
+    <string name="title_home">Pulpit</string>
+    <string name="title_map">Mapa</string>
+    <string name="title_settings">Informacje</string>
+    <string name="title_stations">Stacje</string>
+    <string name="title_activity_maps">Mapa</string>
 </resources>
