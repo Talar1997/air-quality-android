@@ -11,11 +11,11 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_stations"-->
-<!--        android:name="com.example.airqualityandroid.ui.stations.StationsFragment"-->
-<!--        android:label="@string/title_stations"-->
-<!--        tools:layout="@layout/fragment_stations" />-->
+    <fragment
+        android:id="@+id/navigation_stations"
+        android:name="com.example.airqualityandroid.ui.stations.StationFragment"
+        android:label="@string/title_stations"
+        tools:layout="@layout/fragment_stations" />
 
     <fragment
         android:id="@+id/navigation_map"

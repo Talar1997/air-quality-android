@@ -1,4 +1,4 @@
-package com.example.airqualityandroid.ui.stations
+package com.example.airqualityandroid.ui.stationsDeprecated
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.airquality.data.station.Station
 import com.example.airqualityandroid.R
 
-class StationAdapter(private val stations: MutableList<StationViewModel>): RecyclerView.Adapter<StationAdapter.ViewHolder>() {
+class StationsAdapter(): RecyclerView.Adapter<StationsAdapter.ViewHolder>() {
 
     private lateinit var context: Context
+    var stations = mutableListOf<Station>()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val stationLocation: TextView
@@ -35,11 +36,16 @@ class StationAdapter(private val stations: MutableList<StationViewModel>): Recyc
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val stationViewModel = stations[position]
         holder.stationLocation.text = stationViewModel.stationName
-        holder.stationCondition.text = stationViewModel.stationDescription
+        holder.stationCondition.text = stationViewModel.addressStreet
         holder.itemView.setOnClickListener{
             Toast.makeText(context, stationViewModel.stationName, Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun getItemCount() = stations.size
+
+    fun setStationList(stations: List<Station>){
+        this.stations = stations.toMutableList()
+        notifyDataSetChanged()
+    }
 }
