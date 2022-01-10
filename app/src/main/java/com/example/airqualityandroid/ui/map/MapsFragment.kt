@@ -1,16 +1,22 @@
 package com.example.airqualityandroid.ui.map
 
+import android.Manifest
+import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.airquality.api.ApiClient
 import com.example.airquality.data.station.Station
 import com.example.airqualityandroid.R
+import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -20,20 +26,21 @@ import retrofit2.Callback
 
 class MapsFragment : Fragment() {
     private val defaultLocation = LatLng(51.9194, 19.1451)
-    private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
+    private var locationPermissionGranted = false
+    private lateinit var googleMap: GoogleMap
+    private var lastKnownLocation: LatLng? = null
+    private val DEFAULT_ZOOM = 7.00f
+    private val TAG = "MapFragment"
+    private val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        //TODO: get users LatLng
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 7.0F))
+    private val onMapReadyCallback = OnMapReadyCallback { map ->
+        googleMap = map
+        updateLocationUI()
+        getDeviceLocation()
+        drawStationMarkers()
+    }
 
+    private fun drawStationMarkers() {
         //TODO: move it to ViewModel file
         val stationCall: Call<List<Station>> = ApiClient().getStationService().getAllStations()
         stationCall.enqueue(object : Callback<List<Station>> {
@@ -57,6 +64,68 @@ class MapsFragment : Fragment() {
         })
     }
 
+    @SuppressLint("MissingPermission")
+    private fun updateLocationUI() {
+        try {
+            if (locationPermissionGranted) {
+                googleMap.isMyLocationEnabled = true
+                googleMap.uiSettings.isMyLocationButtonEnabled = true
+            } else {
+                googleMap.isMyLocationEnabled = false
+                googleMap.uiSettings.isMyLocationButtonEnabled = false
+                lastKnownLocation = null
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, DEFAULT_ZOOM))
+                getLocationPermission()
+            }
+        } catch (e: SecurityException) {
+            Log.e("Exception: %s", e.message, e)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getDeviceLocation() {
+        /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
+         */
+        try {
+            if (locationPermissionGranted) {
+                val locationResult = fusedLocationProviderClient.lastLocation
+
+                //FIXME: figure out error
+                locationResult.addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Set the map's camera position to the current location of the device.
+                        lastKnownLocation = task.result
+                        if (lastKnownLocation != null) {
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                LatLng(lastKnownLocation!!.latitude,
+                                    lastKnownLocation!!.longitude), DEFAULT_ZOOM))
+                        }
+                    } else {
+                        Log.d(TAG, "Current location is null. Using defaults.")
+                        Log.e(TAG, "Exception: %s", task.exception)
+                        googleMap.moveCamera(CameraUpdateFactory
+                            .newLatLngZoom(defaultLocation, DEFAULT_ZOOM))
+                        googleMap.uiSettings?.isMyLocationButtonEnabled = false
+                    }
+                }
+            }
+        } catch (e: SecurityException) {
+            Log.e("Exception: %s", e.message, e)
+        }
+    }
+
+    private fun getLocationPermission() {
+        val permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            locationPermissionGranted = isGranted
+        }
+
+        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,7 +137,7 @@ class MapsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
+        mapFragment?.getMapAsync(onMapReadyCallback)
     }
 
 }
