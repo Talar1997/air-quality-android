@@ -2,19 +2,19 @@ package com.example.airqualityandroid.ui.map
 
 import android.Manifest
 import android.annotation.SuppressLint
-import androidx.fragment.app.Fragment
-
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import com.example.airquality.api.ApiClient
 import com.example.airquality.data.station.Station
 import com.example.airqualityandroid.R
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -30,8 +30,9 @@ class MapsFragment : Fragment() {
     private lateinit var googleMap: GoogleMap
     private var lastKnownLocation: LatLng? = null
     private val DEFAULT_ZOOM = 7.00f
+    private val LOCATION_ZOOM = 14.00f
     private val TAG = "MapFragment"
-    private val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private val onMapReadyCallback = OnMapReadyCallback { map ->
         googleMap = map
@@ -57,7 +58,7 @@ class MapsFragment : Fragment() {
 
                     //TODO: add other caption and make somehow on click to open other activity with details
                     val latLng = LatLng(station.gegrLat.toDouble(),station.gegrLon.toDouble())
-                    val caption: String = station.city.name
+                    val caption: String = station.stationName
                     googleMap.addMarker(MarkerOptions().position(latLng).title(caption))
                 }
             }
@@ -75,7 +76,6 @@ class MapsFragment : Fragment() {
                 googleMap.uiSettings.isMyLocationButtonEnabled = false
                 lastKnownLocation = null
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, DEFAULT_ZOOM))
-                getLocationPermission()
             }
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
@@ -92,19 +92,18 @@ class MapsFragment : Fragment() {
             if (locationPermissionGranted) {
                 val locationResult = fusedLocationProviderClient.lastLocation
 
-                //FIXME: figure out error
-                locationResult.addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Set the map's camera position to the current location of the device.
-                        lastKnownLocation = task.result
-                        if (lastKnownLocation != null) {
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                LatLng(lastKnownLocation!!.latitude,
-                                    lastKnownLocation!!.longitude), DEFAULT_ZOOM))
-                        }
+                locationResult.addOnSuccessListener { location ->
+                    if (location != null) {
+                        googleMap.moveCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                LatLng(
+                                    location.latitude,
+                                    location.longitude
+                                ), LOCATION_ZOOM
+                            )
+                        )
                     } else {
                         Log.d(TAG, "Current location is null. Using defaults.")
-                        Log.e(TAG, "Exception: %s", task.exception)
                         googleMap.moveCamera(CameraUpdateFactory
                             .newLatLngZoom(defaultLocation, DEFAULT_ZOOM))
                         googleMap.uiSettings?.isMyLocationButtonEnabled = false
@@ -131,7 +130,10 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+        getLocationPermission()
+        val view = inflater.inflate(R.layout.fragment_maps, container, false)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity as Context)
+        return view;
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
