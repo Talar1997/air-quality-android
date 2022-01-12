@@ -38,12 +38,6 @@ class StationViewModel : ViewModel() {
     }
 
     fun getStations(): LiveData<List<Station>> {
-        Log.i("Info", "Getting station")
         return stations;
     }
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
-    }
-    val text: LiveData<String> = _text
 }

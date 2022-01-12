@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.airquality.api.ApiClient
@@ -23,6 +24,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
+import com.google.android.gms.maps.model.Marker
+
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener
+
 
 class MapsFragment : Fragment() {
     private val defaultLocation = LatLng(51.9194, 19.1451)
@@ -39,6 +44,32 @@ class MapsFragment : Fragment() {
         updateLocationUI()
         getDeviceLocation()
         drawStationMarkers()
+        setUpMapListeners()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        getLocationPermission()
+        val view = inflater.inflate(R.layout.fragment_maps, container, false)
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(activity as Context)
+        return view;
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.w("onViewCreated", "onViewCreated ")
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment?.getMapAsync(onMapReadyCallback)
+    }
+
+    private fun setUpMapListeners(){
+        googleMap.setOnInfoWindowClickListener {
+            Toast.makeText(activity, "Clicked on text", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun drawStationMarkers() {
@@ -57,7 +88,7 @@ class MapsFragment : Fragment() {
                 list.forEach { station ->
 
                     //TODO: add other caption and make somehow on click to open other activity with details
-                    val latLng = LatLng(station.gegrLat.toDouble(),station.gegrLon.toDouble())
+                    val latLng = LatLng(station.gegrLat.toDouble(), station.gegrLon.toDouble())
                     val caption: String = station.stationName
                     googleMap.addMarker(MarkerOptions().position(latLng).title(caption))
                 }
@@ -75,7 +106,12 @@ class MapsFragment : Fragment() {
                 googleMap.isMyLocationEnabled = false
                 googleMap.uiSettings.isMyLocationButtonEnabled = false
                 lastKnownLocation = null
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, DEFAULT_ZOOM))
+                googleMap.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        defaultLocation,
+                        DEFAULT_ZOOM
+                    )
+                )
             }
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
@@ -84,6 +120,7 @@ class MapsFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun getDeviceLocation() {
+        Log.w("getDeviceLocation", "getDeviceLocation ")
         /*
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.
@@ -104,8 +141,10 @@ class MapsFragment : Fragment() {
                         )
                     } else {
                         Log.d(TAG, "Current location is null. Using defaults.")
-                        googleMap.moveCamera(CameraUpdateFactory
-                            .newLatLngZoom(defaultLocation, DEFAULT_ZOOM))
+                        googleMap.moveCamera(
+                            CameraUpdateFactory
+                                .newLatLngZoom(defaultLocation, DEFAULT_ZOOM)
+                        )
                         googleMap.uiSettings?.isMyLocationButtonEnabled = false
                     }
                 }
@@ -124,22 +163,4 @@ class MapsFragment : Fragment() {
 
         permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        getLocationPermission()
-        val view = inflater.inflate(R.layout.fragment_maps, container, false)
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity as Context)
-        return view;
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(onMapReadyCallback)
-    }
-
 }
