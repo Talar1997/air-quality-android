@@ -3,6 +3,7 @@ package com.example.airqualityandroid.ui.map
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,6 +39,7 @@ class MapsFragment : Fragment() {
 
     private val onMapReadyCallback = OnMapReadyCallback { map ->
         googleMap = map
+        styleMap()
         updateLocationUI()
         getDeviceLocation()
         drawStationMarkers()
@@ -66,6 +69,20 @@ class MapsFragment : Fragment() {
         googleMap.setOnInfoWindowClickListener {
             MeasurementsIntentStarter.startMeasurementsActivity(requireContext(), it.tag as Station)
         }
+    }
+
+    private fun styleMap() {
+        val nightModeFlags = requireContext().resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK
+        when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES -> applyNightModeStyle()
+        }
+    }
+
+    private fun applyNightModeStyle() {
+        googleMap.setMapStyle(
+            MapStyleOptions.loadRawResourceStyle(
+                requireContext(), R.raw.style_json));
     }
 
     private fun drawStationMarkers() {
