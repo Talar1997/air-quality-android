@@ -4,7 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
+import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +17,7 @@ import com.example.airquality.api.ApiClient
 import com.example.airquality.data.station.Station
 import com.example.airqualityandroid.R
 import com.example.airqualityandroid.utils.MeasurementsIntentStarter
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -37,6 +38,7 @@ class MapsFragment : Fragment() {
     private val TAG = "MapFragment"
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    //FIXME: map sometimes open with default location
     private val onMapReadyCallback = OnMapReadyCallback { map ->
         googleMap = map
         styleMap()
@@ -136,7 +138,6 @@ class MapsFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun getDeviceLocation() {
-        Log.w("getDeviceLocation", "getDeviceLocation ")
         /*
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.
@@ -146,17 +147,12 @@ class MapsFragment : Fragment() {
                 val locationResult = fusedLocationProviderClient.lastLocation
 
                 locationResult.addOnSuccessListener { location ->
+
                     if (location != null) {
-                        googleMap.moveCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                LatLng(
-                                    location.latitude,
-                                    location.longitude
-                                ), LOCATION_ZOOM
-                            )
-                        )
+                        setUserLocation(location, LOCATION_ZOOM)
                     } else {
-                        Log.d(TAG, "Current location is null. Using defaults.")
+                        setupLocationRequestUpdates(fusedLocationProviderClient)
+
                         googleMap.moveCamera(
                             CameraUpdateFactory
                                 .newLatLngZoom(defaultLocation, DEFAULT_ZOOM)
@@ -168,6 +164,31 @@ class MapsFragment : Fragment() {
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
         }
+    }
+
+    private fun setUserLocation(location: Location, zoom: Float = DEFAULT_ZOOM){
+        googleMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(
+                    location.latitude,
+                    location.longitude
+                ), zoom
+            )
+        )
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun setupLocationRequestUpdates(fusedLocationProviderClient: FusedLocationProviderClient){
+        val locationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 20 * 1000
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                setUserLocation(p0.lastLocation, LOCATION_ZOOM)
+            }
+        }
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper())
     }
 
     private fun getLocationPermission() {
