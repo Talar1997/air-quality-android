@@ -8,12 +8,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.airquality.api.ApiClient
 import com.example.airquality.data.station.Station
 import com.example.airqualityandroid.R
+import com.example.airqualityandroid.utils.MeasurementsIntentStarter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -24,10 +24,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
-import com.google.android.gms.maps.model.Marker
-
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener
-
 
 class MapsFragment : Fragment() {
     private val defaultLocation = LatLng(51.9194, 19.1451)
@@ -68,7 +64,7 @@ class MapsFragment : Fragment() {
 
     private fun setUpMapListeners(){
         googleMap.setOnInfoWindowClickListener {
-            Toast.makeText(activity, "Clicked on text", Toast.LENGTH_SHORT).show()
+            MeasurementsIntentStarter.startMeasurementsActivity(requireContext(), it.tag as Station)
         }
     }
 
@@ -86,11 +82,14 @@ class MapsFragment : Fragment() {
             ) {
                 val list: List<Station> = response.body()!!
                 list.forEach { station ->
-
-                    //TODO: add other caption and make somehow on click to open other activity with details
                     val latLng = LatLng(station.gegrLat.toDouble(), station.gegrLon.toDouble())
                     val caption: String = station.stationName
-                    googleMap.addMarker(MarkerOptions().position(latLng).title(caption))
+                    val marker = googleMap.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                            .title(caption)
+                    )
+                    marker?.tag = station
                 }
             }
         })

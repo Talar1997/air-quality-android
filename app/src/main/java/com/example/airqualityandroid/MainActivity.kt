@@ -1,21 +1,18 @@
 package com.example.airqualityandroid
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.airqualityandroid.databinding.ActivityMainBinding
-import com.example.airqualityandroid.ui.stations.StationViewModel
 import com.example.airqualityandroid.ui.stationsDeprecated.StationsAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: StationViewModel by viewModels()
     private lateinit var stationAdapter: StationsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

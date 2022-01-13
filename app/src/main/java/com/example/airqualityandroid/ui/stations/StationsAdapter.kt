@@ -1,15 +1,15 @@
 package com.example.airqualityandroid.ui.stationsDeprecated
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.airquality.data.station.Station
 import com.example.airqualityandroid.R
+import com.example.airqualityandroid.utils.MeasurementsIntentStarter
 
 class StationsAdapter(): RecyclerView.Adapter<StationsAdapter.ViewHolder>() {
 
@@ -39,23 +39,14 @@ class StationsAdapter(): RecyclerView.Adapter<StationsAdapter.ViewHolder>() {
         holder.stationLocation.text = stationViewModel.stationName
         holder.stationCondition.text = stationViewModel.addressStreet
 
-        //TODO: when onClick on station, move to other context with detailed data for station
-        // example:
-        /*holder.itemView.setOnClickListener{
-            val intent = Intent(context, StationActivity::class.java)   //Create activity for station details
-            intent.putExtra("StationId", list[position].id)             //list here equals for stations
-            intent.putExtra("StationName", list[position].stationName)
-            intent.putExtra("StationAddress", list[position].addressStreet)
-            context.startActivity(intent)
-        }*/
-
         holder.itemView.setOnClickListener{
-            Toast.makeText(context, stationViewModel.stationName, Toast.LENGTH_SHORT).show()
+            MeasurementsIntentStarter.startMeasurementsActivity(context, stations[position])
         }
     }
 
     override fun getItemCount() = stations.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setStationList(stations: List<Station>){
         this.stations = stations.toMutableList()
         notifyDataSetChanged()

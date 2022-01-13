@@ -1,6 +1,5 @@
 package com.example.airqualityandroid.ui.stations
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,10 +8,7 @@ import com.example.airquality.data.station.Station
 import retrofit2.Call
 import retrofit2.Callback
 
-//https://developer.android.com/topic/libraries/architecture/viewmodel
-//https://developer.android.com/topic/libraries/architecture/livedata
-//https://howtodoandroid.com/mvvm-retrofit-recyclerview-kotlin/
-class StationViewModel : ViewModel() {
+class StationsViewModel : ViewModel() {
 
     private val stations: MutableLiveData<List<Station>> by lazy {
         MutableLiveData<List<Station>>().also{

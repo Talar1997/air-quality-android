@@ -14,9 +14,9 @@ import com.example.airqualityandroid.R
 import com.example.airqualityandroid.databinding.FragmentStationsBinding
 import com.example.airqualityandroid.ui.stationsDeprecated.StationsAdapter
 
-class StationFragment : Fragment() {
+class StationsFragment : Fragment() {
 
-    private lateinit var stationViewModel: StationViewModel
+    private lateinit var stationsViewModel: StationsViewModel
     private var _binding: FragmentStationsBinding? = null
     private val binding get() = _binding!!
 
@@ -25,12 +25,12 @@ class StationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        stationViewModel =
-            ViewModelProvider(this).get(StationViewModel::class.java)
+        stationsViewModel =
+            ViewModelProvider(this).get(StationsViewModel::class.java)
 
         val stationAdapter = StationsAdapter()
 
-        stationViewModel.getStations().observe(viewLifecycleOwner, Observer<List<Station>>{ station ->
+        stationsViewModel.getStations().observe(viewLifecycleOwner, Observer<List<Station>>{ station ->
             stationAdapter.setStationList(station)
         })
 
