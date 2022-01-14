@@ -3,7 +3,6 @@ package com.example.airqualityandroid.ui.stationsDeprecated
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +19,8 @@ import com.example.airqualityandroid.utils.MeasurementsIntentStarter
 class StationsAdapter: RecyclerView.Adapter<StationsAdapter.ViewHolder>(), Filterable {
 
     private lateinit var context: Context
-    var stations = mutableListOf<Station>()
-    var stationsFilter = mutableListOf<Station>()
+    var allStations = mutableListOf<Station>()
+    var filteredStations = mutableListOf<Station>()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val stationLocation: TextView
@@ -69,7 +68,7 @@ class StationsAdapter: RecyclerView.Adapter<StationsAdapter.ViewHolder>(), Filte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val stationViewModel = stationsFilter[position]
+        val stationViewModel = filteredStations[position]
 
         holder.stationLocation.text = stationViewModel.stationName
         holder.stationCondition.text = stationViewModel.addressStreet
@@ -79,12 +78,12 @@ class StationsAdapter: RecyclerView.Adapter<StationsAdapter.ViewHolder>(), Filte
         }
     }
 
-    override fun getItemCount() = stationsFilter.size
+    override fun getItemCount() = filteredStations.size
 
     @SuppressLint("NotifyDataSetChanged")
     fun setStationList(stations: List<Station>){
-        this.stations = stations.toMutableList()
-        this.stationsFilter = this.stations
+        this.allStations = stations.toMutableList()
+        this.filteredStations = this.allStations
         notifyDataSetChanged()
     }
 
@@ -93,28 +92,28 @@ class StationsAdapter: RecyclerView.Adapter<StationsAdapter.ViewHolder>(), Filte
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charSearch = constraint.toString()
                 if (charSearch.isEmpty()) {
-                    stationsFilter = stations
+                    filteredStations = allStations
                 } else {
                     val resultList = mutableListOf<Station>()
-                    stations.forEach {
+                    allStations.forEach {
                         val stationString = it.stationName + it.addressStreet + it.city
                         if(stationString.lowercase().contains(charSearch.lowercase())){
                             resultList.add(it)
                         }
                     }
 
-                    stationsFilter = resultList
+                    filteredStations = resultList
                 }
 
                 val filterResults = FilterResults()
-                filterResults.values = stationsFilter
+                filterResults.values = filteredStations
                 return filterResults
             }
 
             @SuppressLint("NotifyDataSetChanged")
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                stationsFilter = results?.values as MutableList<Station>
+                filteredStations = results?.values as MutableList<Station>
                 notifyDataSetChanged()
             }
         }

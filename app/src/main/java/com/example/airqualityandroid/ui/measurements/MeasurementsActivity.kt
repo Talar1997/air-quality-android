@@ -17,6 +17,7 @@ class MeasurementsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.measurements_activity)
+        title = getString(R.string.title_measurements)
 
         val stationId = intent.getIntExtra("StationId", -1)
         var stationName = intent.getStringExtra("StationName")
