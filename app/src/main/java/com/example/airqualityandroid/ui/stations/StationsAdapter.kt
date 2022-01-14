@@ -2,12 +2,14 @@ package com.example.airqualityandroid.ui.stationsDeprecated
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -32,40 +34,52 @@ class StationsAdapter: RecyclerView.Adapter<StationsAdapter.ViewHolder>(), Filte
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
         context = parent.context
         val view = LayoutInflater.from(context)
             .inflate(R.layout.station_item, parent, false)
 
+        setupAndStyleSearch(parent)
+
+        return ViewHolder(view)
+    }
+
+    private fun setupAndStyleSearch(parent: ViewGroup){
         val linearLayoutParent = parent.parent as ViewGroup
         val searchView = linearLayoutParent.getChildAt(0) as SearchView
+
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                TODO("Implement action on adapter")
-                Log.d("tag", newText + "")
+                filter.filter(newText)
                 return false
             }
-
         })
 
-        return ViewHolder(view)
+        val searchIcon = searchView.findViewById<ImageView>(R.id.search_mag_icon)
+        searchIcon.setColorFilter(Color.WHITE)
+
+        val cancelIcon = searchView.findViewById<ImageView>(R.id.search_close_btn)
+        cancelIcon.setColorFilter(Color.WHITE)
+
+        val textView = searchView.findViewById<TextView>(R.id.search_src_text)
+        textView.setTextColor(Color.WHITE)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val stationViewModel = stationsFilter[position]
+
         holder.stationLocation.text = stationViewModel.stationName
         holder.stationCondition.text = stationViewModel.addressStreet
 
         holder.itemView.setOnClickListener{
-            MeasurementsIntentStarter.startMeasurementsActivity(context, stationsFilter[position])
+            MeasurementsIntentStarter.startMeasurementsActivity(context, stationViewModel)
         }
     }
 
-    override fun getItemCount() = stations.size
+    override fun getItemCount() = stationsFilter.size
 
     @SuppressLint("NotifyDataSetChanged")
     fun setStationList(stations: List<Station>){
