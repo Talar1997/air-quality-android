@@ -5,4 +5,6 @@
     <string name="title_settings">Informacje</string>
     <string name="title_stations">Stacje</string>
     <string name="title_activity_maps">Mapa</string>
+    <string name="station_title_placeholder">Station name placeholder</string>
+    <string name="station_description_placeholder">Station description placeholder</string>
 </resources>

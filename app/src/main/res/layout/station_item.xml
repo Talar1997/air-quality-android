@@ -3,32 +3,44 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="65dp"
     android:layout_margin="5dp"
-    app:cardElevation="6dp"
+    app:cardElevation="3dp"
     android:id="@+id/station_item">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:background="?android:attr/selectableItemBackground">
+
+        <ImageView
+            android:id="@+id/station_icon"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_cloud_queue_24"
+            app:tint="@color/colorSecondary" />
 
         <TextView
             android:id="@+id/station_location"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Station name placeholder"
+            android:singleLine="true"
+            android:text="@string/station_title_placeholder"
             android:textColor="@color/black"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_marginLeft="65dp"/>
 
         <TextView
             android:id="@+id/station_condition"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Station description placeholder"
-            android:textColor="@color/black"
-            android:layout_below="@id/station_location" />
+            android:singleLine="true"
+            android:text="@string/station_description_placeholder"
+            android:textColor="#A4070707"
+            android:layout_below="@id/station_location"
+            android:layout_marginLeft="65dp"/>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

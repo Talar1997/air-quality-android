@@ -4,7 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.stations.StationsFragment">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/station_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textCursorDrawable="@null"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@null" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stations_recycler_view_dashboard"
