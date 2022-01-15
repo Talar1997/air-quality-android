@@ -8,4 +8,9 @@
     <string name="title_activity_maps">Mapa</string>
     <string name="station_title_placeholder">Station name placeholder</string>
     <string name="station_description_placeholder">Station description placeholder</string>
+    <string name="measurement_name_placeholder">PM2,5</string>
+    <string name="measurement_description_placeholder">Pył zawieszony o średnicy nie większej niż 2,5 μm</string>
+    <string name="measurement_value_placeholder">3078</string>
+    <string name="measurement_station_placeholder">Lubelska 51</string>
+    <string name="measurement_index_placeholder">Jakość umiarkowana</string>
 </resources>

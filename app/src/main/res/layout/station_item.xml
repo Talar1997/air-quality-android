@@ -6,7 +6,7 @@
     android:layout_height="65dp"
     android:layout_margin="5dp"
     app:cardElevation="3dp"
-    android:id="@+id/station_item">
+    android:id="@+id/measurement_item">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:background="?android:attr/selectableItemBackground">
 
         <ImageView
-            android:id="@+id/station_icon"
+            android:id="@+id/measurement_icon"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:src="@drawable/ic_baseline_cloud_queue_24"
