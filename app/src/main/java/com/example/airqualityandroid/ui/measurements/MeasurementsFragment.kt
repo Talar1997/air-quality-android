@@ -7,46 +7,59 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.airqualityandroid.R
+import com.example.airqualityandroid.databinding.FragmentStationsBinding
 
 class MeasurementsFragment : Fragment() {
-
-    fun setStation(stationId: Int, stationName: String){
-        Log.d("MeasurementsFragment, setStation", "$stationId, $stationName")
-    }
+    private lateinit var viewModel: MeasurementsViewModel
+    private var _binding: FragmentStationsBinding? = null
+    private val binding get() = _binding!!
+    private var stationId = -1
+    private var stationName = ""
 
     companion object {
         fun newInstance() = MeasurementsFragment()
     }
 
-    private lateinit var viewModel: MeasurementsViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.measurements_fragment, container, false)
+        viewModel = ViewModelProvider(this).get(MeasurementsViewModel::class.java)
+        viewModel.stationId = this.stationId
 
-//        val stationIndexData: Call<IndexLevel> =
-//            ApiClient().getStationIndexService().getStationIndex(stationId.toString())
-//
-//        //TODO: move to ViewModel file
-//        stationIndexData.enqueue(object : Callback<IndexLevel> {
-//            override fun onResponse(call: Call<IndexLevel>, response: Response<IndexLevel>) {
-//                val response: IndexLevel = response.body()!!
-//                TODO("Not implemented yet")
-//            }
-//
-//            override fun onFailure(call: Call<IndexLevel>, t: Throwable) {
-//                println("failed")
-//            }
-//        })
+        val measurementsAdapter = MeasurementsAdapter()
+
+        viewModel.getMeasurements().observe(viewLifecycleOwner, { measurementPairs ->
+            measurementsAdapter.setMeasurementPairsList(measurementPairs)
+        })
+
+        val view = inflater.inflate(R.layout.measurements_fragment, container, false)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.measurements_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter = measurementsAdapter
+
+        val stationNameTextView = view.findViewById<TextView>(R.id.measurement_station_name)
+        stationNameTextView.text = stationName
+
+        return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MeasurementsViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    fun setStation(stationId: Int, stationName: String){
+        this.stationId = stationId
+        this.stationName = stationName
     }
 
 }

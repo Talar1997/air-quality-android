@@ -33,6 +33,7 @@ class MapsFragment : Fragment() {
     private var locationPermissionGranted = false
     private lateinit var googleMap: GoogleMap
     private var lastKnownLocation: LatLng? = null
+    private var locationFoundOnce = false
     private val DEFAULT_ZOOM = 7.00f
     private val LOCATION_ZOOM = 14.00f
     private val TAG = "MapFragment"
@@ -167,14 +168,19 @@ class MapsFragment : Fragment() {
     }
 
     private fun setUserLocation(location: Location, zoom: Float = DEFAULT_ZOOM){
-        googleMap.moveCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(
-                    location.latitude,
-                    location.longitude
-                ), zoom
+        googleMap.uiSettings?.isMyLocationButtonEnabled = false
+
+        if(!locationFoundOnce){
+            googleMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        location.latitude,
+                        location.longitude
+                    ), zoom
+                )
             )
-        )
+            locationFoundOnce = true
+        }
     }
 
     @SuppressLint("MissingPermission")

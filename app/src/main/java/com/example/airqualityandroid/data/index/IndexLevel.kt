@@ -25,4 +25,10 @@ data class IndexLevel(
 
     @SerializedName("pm25IndexLevel")
     val pm25IndexLevel: ParamIndexLevel?,
+
+    @SerializedName("o3IndexLevel")
+    val o3IndexLevel: ParamIndexLevel?,
+
+    @SerializedName("c6h6IndexLevel")
+    val c6h6IndexLevel: ParamIndexLevel?,
 )

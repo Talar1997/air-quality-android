@@ -30,7 +30,7 @@ class StationsFragment : Fragment() {
 
         val stationAdapter = StationsAdapter()
 
-        stationsViewModel.getStations().observe(viewLifecycleOwner, Observer<List<Station>>{ station ->
+        stationsViewModel.getStations().observe(viewLifecycleOwner, { station ->
             stationAdapter.setStationList(station)
         })
 

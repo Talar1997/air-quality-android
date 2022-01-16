@@ -6,7 +6,7 @@
     android:layout_height="65dp"
     android:layout_margin="5dp"
     app:cardElevation="3dp"
-    android:id="@+id/measurement_item">
+    android:id="@+id/station_item">
 
     <RelativeLayout
         android:layout_width="match_parent"
