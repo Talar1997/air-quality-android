@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.airquality.data.MeasurementPair
 import com.example.airqualityandroid.R
+import com.example.airqualityandroid.api.MeasurementKey
 import com.example.airqualityandroid.utils.MeasurementResolver.Companion.resolveMeasurementDescription
 import com.example.airqualityandroid.utils.MeasurementResolver.Companion.resolveMeasurementName
 
@@ -53,12 +54,22 @@ class MeasurementsAdapter: RecyclerView.Adapter<MeasurementsAdapter.ViewHolder>(
         holder.measurementDescription.text = resolveMeasurementDescription(context, measurement.key)
         holder.measurementIndex.text = context.getString(R.string.index_name) + " " + measurement.indexName
 
-        if(measurement.measurementValue == null)
-            holder.measurementValue.text = context.getString(R.string.VAL_NA)
+        if(measurement.measurementValue == null){
+            if(measurement.key == MeasurementKey.ST_INDEX){
+                holder.measurementValue.text = context.getString(R.string.VAL_ST_INDEX)
+
+            }else {
+                holder.measurementValue.text = context.getString(R.string.VAL_NA)
+            }
+        }
         else holder.measurementValue.text = String.format("%.2f", measurement.measurementValue)
 
         //-1 – Brak indeksu, 0 – Bardzo dobry, 1 – Dobry, 2 – Umiarkowany, 3 - Dostateczny, 4 – Zły, 5 – Bardzo zły
         when(measurement.index) {
+            -1 -> {
+                holder.measurementIcon.setImageResource(R.drawable.ic_baseline_remove_circle_24)
+                holder.measurementIcon.setColorFilter(Color.parseColor("#EED202"))
+            }
             0,1 -> {
                 holder.measurementIcon.setImageResource(R.drawable.ic_baseline_check_circle_24)
                 holder.measurementIcon.setColorFilter(Color.parseColor("#4BB543"))

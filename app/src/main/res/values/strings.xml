@@ -13,7 +13,7 @@
     <string name="measurement_index_description_placeholder">Indeks umiarkowany</string>
     <string name="measurement_value_placeholder">2137</string>
     <string name="measurement_station_placeholder">Nazwa stacji</string>
-    <string name="measurement_index_placeholder">Jakość powietrza</string>
+    <string name="measurement_index_placeholder">Źródło danych: api.gios.gov.pl</string>
 
     <string name="ST_INDEX">Jakość powietrza</string>
     <string name="CO">CO</string>
@@ -27,12 +27,13 @@
     <string name="index_name">Indeks jakości: </string>
 
     <string name="ST_INDEX_DESCRIPTION">Ogólna jakość powietrza</string>
-    <string name="CO_DESCRIPTION">Tlenek węgla</string>
-    <string name="NO2_DESCRIPTION">Dwutlenek azotu</string>
-    <string name="O3_DESCRIPTION">Ozon</string>
-    <string name="SO2_DESCRIPTION">Dwutlenek siarki</string>
-    <string name="PM25_DESCRIPTION">Cząsteczki o średnicy ≤ 2,5 μm</string>
-    <string name="PM10_DESCRIPTION">Cząsteczki o średnicy ≤ 10 μm</string>
-    <string name="C6H6_DESCRIPTION">Benzeny</string>
+    <string name="CO_DESCRIPTION">Tlenek węgla (mg/m3)</string>
+    <string name="NO2_DESCRIPTION">Dwutlenek azotu (µg/m3)</string>
+    <string name="O3_DESCRIPTION">Ozon (µg/m3)</string>
+    <string name="SO2_DESCRIPTION">Dwutlenek siarki (µg/m3)</string>
+    <string name="PM25_DESCRIPTION">Cząsteczki o średnicy ≤ 2,5 μm (µg/m3)</string>
+    <string name="PM10_DESCRIPTION">Cząsteczki o średnicy ≤ 10 μm (µg/m3)</string>
+    <string name="C6H6_DESCRIPTION">Benzeny (µg/m3)</string>
     <string name="VAL_NA">N/A</string>
+    <string name="VAL_ST_INDEX">-</string>
 </resources>
