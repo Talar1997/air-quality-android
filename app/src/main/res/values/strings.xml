@@ -36,4 +36,5 @@
     <string name="C6H6_DESCRIPTION">Benzeny (µg/m3)</string>
     <string name="VAL_NA">N/A</string>
     <string name="VAL_ST_INDEX">-</string>
+    <string name="SAVED_STATIONS">SAVED_STATIONS</string>
 </resources>
