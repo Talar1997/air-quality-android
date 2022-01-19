@@ -1,5 +1,6 @@
 package com.example.airqualityandroid.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.airqualityandroid.R
 import com.example.airqualityandroid.databinding.FragmentHomeBinding
+
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
@@ -34,6 +37,13 @@ class HomeFragment : Fragment() {
             textView.text = it
         })
 
+        val sharedPref = activity?.getSharedPreferences(R.string.SAVED_STATIONS.toString(), Context.MODE_PRIVATE)
+        val savedStations = sharedPref?.getStringSet(R.string.SAVED_STATIONS.toString(), mutableSetOf())
+
+        println("loaded stations")
+        savedStations?.forEach{
+            println(it)
+        }
 
         return root
     }
