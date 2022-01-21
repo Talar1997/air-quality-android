@@ -37,4 +37,7 @@
     <string name="VAL_NA">N/A</string>
     <string name="VAL_ST_INDEX">-</string>
     <string name="SAVED_STATIONS">SAVED_STATIONS</string>
+
+    <string name="nearest_station_placeholder">Najbliższa stacja pomiarowa</string>
+    <string name="saved_stations_placeholder">Zapisane stacje</string>
 </resources>

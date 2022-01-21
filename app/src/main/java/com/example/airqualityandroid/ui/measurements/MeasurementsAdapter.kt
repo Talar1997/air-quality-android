@@ -28,7 +28,6 @@ class MeasurementsAdapter: RecyclerView.Adapter<MeasurementsAdapter.ViewHolder>(
         val measurementValue: TextView
 
         init {
-            //FIXME: elements are in different layouts, so this may be issue here.
             measurementIcon = view.findViewById(R.id.measurement_icon)
             measurementName = view.findViewById(R.id.measurement_name)
             measurementDescription = view.findViewById(R.id.measurement_description)
@@ -39,7 +38,6 @@ class MeasurementsAdapter: RecyclerView.Adapter<MeasurementsAdapter.ViewHolder>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
-        //FIXME: getting only measurement_item, not layouts for other data outside card
         val view = LayoutInflater.from(context)
             .inflate(R.layout.measurement_item, parent, false)
 

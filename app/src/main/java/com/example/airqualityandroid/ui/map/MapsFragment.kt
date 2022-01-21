@@ -13,9 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.airquality.api.ApiClient
 import com.example.airquality.data.station.Station
 import com.example.airqualityandroid.R
+import com.example.airqualityandroid.ui.stations.StationsViewModel
 import com.example.airqualityandroid.utils.MeasurementsIntentStarter
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -36,10 +38,8 @@ class MapsFragment : Fragment() {
     private var locationFoundOnce = false
     private val DEFAULT_ZOOM = 7.00f
     private val LOCATION_ZOOM = 14.00f
-    private val TAG = "MapFragment"
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    //FIXME: map sometimes open with default location
     private val onMapReadyCallback = OnMapReadyCallback { map ->
         googleMap = map
         styleMap()
@@ -89,28 +89,19 @@ class MapsFragment : Fragment() {
     }
 
     private fun drawStationMarkers() {
-        //TODO: move it to ViewModel file
-        val stationCall: Call<List<Station>> = ApiClient().getStationService().getAllStations()
-        stationCall.enqueue(object : Callback<List<Station>> {
-            override fun onFailure(call: Call<List<Station>>?, t: Throwable?) {
-                println("fail")
-            }
+        val stationsViewModel =
+            ViewModelProvider(this).get(StationsViewModel::class.java)
 
-            override fun onResponse(
-                call: Call<List<Station>>,
-                response: retrofit2.Response<List<Station>>
-            ) {
-                val list: List<Station> = response.body()!!
-                list.forEach { station ->
-                    val latLng = LatLng(station.gegrLat.toDouble(), station.gegrLon.toDouble())
-                    val caption: String = station.stationName
-                    val marker = googleMap.addMarker(
-                        MarkerOptions()
-                            .position(latLng)
-                            .title(caption)
-                    )
-                    marker?.tag = station
-                }
+        stationsViewModel.getStations().observe(viewLifecycleOwner, { stations ->
+            stations.forEach { station ->
+                val latLng = LatLng(station.gegrLat.toDouble(), station.gegrLon.toDouble())
+                val caption: String = station.stationName
+                val marker = googleMap.addMarker(
+                    MarkerOptions()
+                        .position(latLng)
+                        .title(caption)
+                )
+                marker?.tag = station
             }
         })
     }
