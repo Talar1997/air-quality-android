@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="@string/station_title_placeholder"
+                android:text="@string/nearest_station_title_placeholder"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="@string/station_description_placeholder"
+                android:text="@string/nearest_station_description_placeholder"
                 android:textColor="#A4070707"
                 android:layout_below="@id/nearest_station_location"
                 android:layout_marginLeft="65dp"/>
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="@string/measurement_index_description_placeholder"
+                android:text="@string/nearest_station_index_placeholder"
                 android:textColor="#A4070707"
                 android:layout_below="@id/nearest_station_condition"
                 android:layout_marginLeft="65dp"/>

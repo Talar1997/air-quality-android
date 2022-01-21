@@ -159,7 +159,7 @@ class MapsFragment : Fragment() {
     }
 
     private fun setUserLocation(location: Location, zoom: Float = DEFAULT_ZOOM){
-        googleMap.uiSettings?.isMyLocationButtonEnabled = false
+        googleMap.uiSettings?.isMyLocationButtonEnabled = true
 
         if(!locationFoundOnce){
             googleMap.moveCamera(

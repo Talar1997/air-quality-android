@@ -1,5 +1,6 @@
 package com.example.airqualityandroid.ui.home
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
@@ -27,6 +28,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,7 +61,7 @@ class HomeFragment : Fragment() {
                 val nearestStationView = view.findViewById<CardView>(R.id.nearest_item)
                 nearestStationView.findViewById<TextView>(R.id.nearest_station_location).text = nearestStation.station.stationName
                 nearestStationView.findViewById<TextView>(R.id.nearest_station_condition).text = nearestStation.station.addressStreet
-                nearestStationView.findViewById<TextView>(R.id.nearest_station_index).text = nearestStation.index?.indexName
+                nearestStationView.findViewById<TextView>(R.id.nearest_station_index).text = requireContext().getString(R.string.index_name) + " " +nearestStation.index?.indexName
 
                 nearestStationView.setOnClickListener{
                     MeasurementsIntentStarter.startMeasurementsActivity(requireContext(), nearestStation.station)

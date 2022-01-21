@@ -40,4 +40,8 @@
 
     <string name="nearest_station_placeholder">Najbliższa stacja pomiarowa</string>
     <string name="saved_stations_placeholder">Zapisane stacje</string>
+
+    <string name="nearest_station_title_placeholder">Wyszukiwanie stacji…</string>
+    <string name="nearest_station_description_placeholder">N/A</string>
+    <string name="nearest_station_index_placeholder">N/A</string>
 </resources>
