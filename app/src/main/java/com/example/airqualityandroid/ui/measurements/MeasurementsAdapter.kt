@@ -8,11 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.airquality.data.MeasurementPair
+import com.example.airqualityandroid.data.measurement.MeasurementPair
 import com.example.airqualityandroid.R
-import com.example.airqualityandroid.api.MeasurementKey
+import com.example.airqualityandroid.data.measurement.MeasurementKey
 import com.example.airqualityandroid.utils.MeasurementResolver.Companion.resolveMeasurementDescription
 import com.example.airqualityandroid.utils.MeasurementResolver.Companion.resolveMeasurementName
 

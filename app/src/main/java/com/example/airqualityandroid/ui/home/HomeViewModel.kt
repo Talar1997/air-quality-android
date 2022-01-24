@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.airquality.api.ApiClient
-import com.example.airquality.data.MeasurementPair
+import com.example.airqualityandroid.data.measurement.MeasurementPair
 import com.example.airquality.data.index.IndexLevel
 import com.example.airquality.data.station.Station
-import com.example.airqualityandroid.api.MeasurementKey
-import com.example.airqualityandroid.data.StationDistance
-import com.example.airqualityandroid.data.StationWithIndex
+import com.example.airqualityandroid.data.measurement.MeasurementKey
+import com.example.airqualityandroid.data.station.StationDistance
+import com.example.airqualityandroid.data.station.StationWithIndex
 import com.google.android.gms.location.FusedLocationProviderClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -64,7 +64,8 @@ class HomeViewModel : ViewModel() {
                 var measurement: MeasurementPair? = null
 
                 if (response.stIndexLevel != null) {
-                    measurement = MeasurementPair(MeasurementKey.ST_INDEX,
+                    measurement = MeasurementPair(
+                        MeasurementKey.ST_INDEX,
                         response.stIndexLevel.indexLevelName,
                         response.stIndexLevel.id,
                         null)
@@ -93,7 +94,8 @@ class HomeViewModel : ViewModel() {
                     var measurement: MeasurementPair? = null
 
                     if (response.stIndexLevel != null) {
-                        measurement = MeasurementPair(MeasurementKey.ST_INDEX,
+                        measurement = MeasurementPair(
+                            MeasurementKey.ST_INDEX,
                             response.stIndexLevel.indexLevelName,
                             response.stIndexLevel.id,
                             null)

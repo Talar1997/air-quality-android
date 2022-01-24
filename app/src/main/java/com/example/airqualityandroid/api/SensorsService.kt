@@ -1,5 +1,5 @@
 package com.example.airquality.api
-import com.example.airquality.data.Sensor
+import com.example.airqualityandroid.data.sensor.Sensor
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -1,6 +1,5 @@
-package com.example.airquality.data
+package com.example.airqualityandroid.data.sensor
 
-import com.example.airqualityandroid.data.SensorParam
 import com.google.gson.annotations.SerializedName
 
 data class Sensor(

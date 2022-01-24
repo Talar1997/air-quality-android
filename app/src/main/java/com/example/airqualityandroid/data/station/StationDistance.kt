@@ -1,4 +1,4 @@
-package com.example.airqualityandroid.data
+package com.example.airqualityandroid.data.station
 
 import com.example.airquality.data.station.Station
 

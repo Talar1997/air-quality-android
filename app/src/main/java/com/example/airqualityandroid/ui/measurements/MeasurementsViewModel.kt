@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.airquality.api.ApiClient
-import com.example.airquality.data.MeasurementPair
-import com.example.airquality.data.Sensor
+import com.example.airqualityandroid.data.measurement.MeasurementPair
+import com.example.airqualityandroid.data.sensor.Sensor
 import com.example.airquality.data.index.IndexLevel
 import com.example.airquality.data.value.Values
-import com.example.airqualityandroid.api.MeasurementKey
+import com.example.airqualityandroid.data.measurement.MeasurementKey
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,7 +33,8 @@ class MeasurementsViewModel : ViewModel() {
 
                 if (response.stIndexLevel != null) {
                     list.add(
-                        MeasurementPair(MeasurementKey.ST_INDEX,
+                        MeasurementPair(
+                            MeasurementKey.ST_INDEX,
                             response.stIndexLevel.indexLevelName,
                             response.stIndexLevel.id,
                             null)

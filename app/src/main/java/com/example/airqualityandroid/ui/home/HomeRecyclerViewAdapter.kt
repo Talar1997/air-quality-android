@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.airqualityandroid.R
-import com.example.airqualityandroid.data.StationWithIndex
+import com.example.airqualityandroid.data.station.StationWithIndex
 import com.example.airqualityandroid.utils.MeasurementsIntentStarter
 
 class HomeRecyclerViewAdapter: RecyclerView.Adapter<HomeRecyclerViewAdapter.ViewHolder>() {

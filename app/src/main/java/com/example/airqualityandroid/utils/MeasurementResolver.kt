@@ -2,7 +2,7 @@ package com.example.airqualityandroid.utils
 
 import android.content.Context
 import com.example.airqualityandroid.R
-import com.example.airqualityandroid.api.MeasurementKey
+import com.example.airqualityandroid.data.measurement.MeasurementKey
 
 class MeasurementResolver {
     companion object {

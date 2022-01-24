@@ -1,4 +1,4 @@
-package com.example.airqualityandroid.data
+package com.example.airqualityandroid.data.sensor
 
 import com.google.gson.annotations.SerializedName
 
