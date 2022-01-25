@@ -94,16 +94,20 @@ class MapsFragment : Fragment() {
 
         stationsViewModel.getStations().observe(viewLifecycleOwner, { stations ->
             stations.forEach { station ->
-                val latLng = LatLng(station.gegrLat.toDouble(), station.gegrLon.toDouble())
-                val caption: String = station.stationName
-                val marker = googleMap.addMarker(
-                    MarkerOptions()
-                        .position(latLng)
-                        .title(caption)
-                )
-                marker?.tag = station
+                addMarkerOnMap(station)
             }
         })
+    }
+
+    private fun addMarkerOnMap(station: Station) {
+        val latLng = LatLng(station.gegrLat.toDouble(), station.gegrLon.toDouble())
+        val caption: String = station.stationName
+        val marker = googleMap.addMarker(
+            MarkerOptions()
+                .position(latLng)
+                .title(caption)
+        )
+        marker?.tag = station
     }
 
     @SuppressLint("MissingPermission")
